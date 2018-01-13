@@ -1,0 +1,23 @@
+{
+  "name": "data_stream",
+  "version": "1.0.0",
+  "description": "Streaming Crypto Data",
+  "main": "data.js",
+  "dependencies": {
+    "gdax": "^0.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsunamiq/data_stream.git"
+  },
+  "author": "Jonathan N. Thinh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tsunamiq/data_stream/issues"
+  },
+  "homepage": "https://github.com/tsunamiq/data_stream#readme"
+}
