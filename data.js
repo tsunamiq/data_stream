@@ -11,36 +11,68 @@ const websocket = new Gdax.WebsocketClient(['BTC-USD', 'ETH-USD']);
 
 var fs = require('fs');
 
-
-setInterval(function(){ getTicker() }, 1000);
-
-
-
-
-
-
 let  getTicker = () => {
 	var dataArray = [];
-	publicClient.getProductTicker('BTC-USD',(err, response, data) =>{
-		if(err){
-			console.log("error with getTicker function");
-		}else{
-			dataArray = [data.trade_id,data.price, data.size, data.bid, data.ask, data.volume, data.time];
-			console.log(dataArray);
+	var current_timestamp = "";
+	var timestamp_seconds ;
+	var timestamp_iso; 
+	var duplicate_array = [];
+	var time_multiplier = 0;
 
-			// fs.appendFile("data.txt",dataArray , function(err) {
-			//     if(err) {
-			//         return console.log(err);
-			//  }
+	console.log(current_timestamp)
 
-			 fs.open('data.txt', 'a', 666, function( e, id ) {
-			   fs.write( id, dataArray + "\n", null, 'utf8', function(){
-			 
-			     console.log('file is updated');
-			    });
-			
-			  });
-		}
-	});
+	setInterval(function(){
+		publicClient.getProductTicker('BTC-USD',(err, response, data) =>{
+			if(err){
+				console.log("error with getTicker function");
+			}else{
+				dataArray = [data.trade_id,data.price, data.size, data.bid, data.ask, data.volume, data.time];
+				timestamp_seconds = new Date(data.time).getTime();
+				console.log("Timestamp in seconds: " +  timestamp_seconds);
+
+
+				if(current_timestamp === "" ){
+
+					current_timestamp = timestamp_seconds; 
+
+					console.log("=============================")
+					console.log("TImestamp Initilized");
+					console.log(current_timestamp);
+					console.log("=============================") 
+					dataArray[6] = new Date(data.time);
+					duplicate_array.push(current_timestamp);
+					
+				}else if(current_timestamp === timestamp_seconds){
+
+					time_multiplier = (duplicate_array.length) * 1000
+					timestamp_iso = new Date(timestamp_seconds + time_multiplier)
+					dataArray[6] = timestamp_iso; 
+					duplicate_array.push(timestamp_seconds);
+
+					console.log("=========================")
+					console.log("duplicate found")
+					console.log("length of dup array: " + duplicate_array.length)
+					console.log(duplicate_array)
+					console.log("=========================")
+					
+				}else{
+					current_timestamp = timestamp_seconds;
+					dataArray[6] = new Date(data.time);
+					duplicate_array = [];
+					duplicate_array.push(timestamp_seconds);
+				}			
+
+				fs.open('data.txt', 'a', 666, function( e, id ) {
+				   fs.write( id, dataArray + "\n", null, 'utf8', function(){
+						console.log(dataArray);
+						console.log('file is updated');
+				    });
+				
+				  });
+			}
+		});
+	},1000);
 }
+
+getTicker();
 
