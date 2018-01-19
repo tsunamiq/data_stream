@@ -1,13 +1,8 @@
 const Gdax = require('gdax');
 const publicClient = new Gdax.PublicClient();
-
-
 const apiURI = 'https://api.gdax.com';
 const sandboxURI = 'https://api-public.sandbox.gdax.com';
-
-
 const websocket = new Gdax.WebsocketClient(['BTC-USD', 'ETH-USD']);
-
 
 var fs = require('fs');
 
