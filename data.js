@@ -14,18 +14,17 @@ let  getTicker = () => {
 	var duplicate_array = [];
 	var time_multiplier = 0;
 
+	console.log("FUNCTION START!")
+
 	console.log(current_timestamp)
 
 	setInterval(function(){
 		publicClient.getProductTicker('BTC-USD',(err, response, data) =>{
-			if(err){
-				console.log("error with getTicker function");
-			}else{
+			try{
 				dataArray = [data.trade_id,data.price, data.size, data.bid, data.ask, data.volume, data.time];
 				timestamp_seconds = new Date(data.time).getTime();
 				console.log("Timestamp in seconds: " +  timestamp_seconds);
-
-
+		
 				if(current_timestamp === "" ){
 
 					current_timestamp = timestamp_seconds; 
@@ -65,6 +64,20 @@ let  getTicker = () => {
 				
 				  });
 			}
+			catch(err){
+				console.log("error with getTicker function" + err);
+					let timestamp = new Date();
+					let log = [timestamp, "index error: " + dataArray.indexOf(null), err]
+					fs.open('log.txt', 'a', 666, function( e, id ) {
+					   	fs.write( id, log + "\n", null, 'utf8', function(){
+							console.log(log);
+							console.log('file is updated');
+					    });
+				 	 });
+					console.log("NULL found in data:")		
+			}
+			
+
 		});
 	},1000);
 }
