@@ -4,7 +4,8 @@
   "description": "Streaming Crypto Data",
   "main": "data.js",
   "dependencies": {
-    "gdax": "^0.5.1"
+    "gdax": "^0.5.1",
+    "influx": "^5.0.7"
   },
   "devDependencies": {},
   "scripts": {
